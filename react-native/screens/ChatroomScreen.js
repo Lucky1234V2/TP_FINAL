@@ -23,7 +23,7 @@ const ChatroomScreen = ({route, navigation}) => {
     const fetchMessages = async () => {
       try {
         const response = await axios.post(
-          'http://192.168.43.20/tp_final/list_messages.php',
+          'http://192.168.1.127:8000/list_messages.php',
           {chatroom_id: chatroomId},
         );
         setMessages(response.data);
@@ -40,7 +40,7 @@ const ChatroomScreen = ({route, navigation}) => {
       try {
         console.log(userId);
         const response = await axios.post(
-          'http://192.168.43.20/tp_final/send_message.php',
+          'http://192.168.1.127:8000/send_message.php',
           {
             chatroom_id: chatroomId,
             user_id: userId, // remplacer par l'ID de l'utilisateur connecté
