@@ -10,6 +10,7 @@ const LoginScreen = ({navigation}) => {
 
   const handleLogin = async () => {
     try {
+      //bonjour
       // Remplacez par l'URL de votre backend
       console.log('ici');
       const response = await axios.post(
