@@ -9,14 +9,16 @@ const LoginScreen = ({navigation}) => {
   const {setUserId} = useContext(UserContext);
 
   const handleLogin = async () => {
-    console.log('ici');
     try {
-      // Remplacez par l'URL du reseau à chaque fois que vous lancez le projet
-
-      const response = await axios.post('http://192.168.1.127:8000/login.php', {
-        username,
-        password,
-      });
+      // Remplacez par l'URL de votre backend
+      console.log('ici');
+      const response = await axios.post(
+        'http://10.93.164.254/tp_final/login.php',
+        {
+          username,
+          password,
+        },
+      );
       console.log('username', username, 'password', password);
       if (response.data.success) {
         setUserId(response.data.user.id);
@@ -24,10 +26,9 @@ const LoginScreen = ({navigation}) => {
         navigation.navigate('MessageList', {userId: response.data.user.id});
       } else {
         alert('Erreur de connexion');
-        console.log('reponse', response);
       }
     } catch (error) {
-      console.error('Erreur détaillée:', error, 'reponse', response);
+      console.error('Erreur détaillée:', error);
       alert('Erreur lors de la connexion');
     }
   };
@@ -35,7 +36,7 @@ const LoginScreen = ({navigation}) => {
   const handleSignup = async () => {
     try {
       const response = await axios.post(
-        'http://192.168.1.127:8000/signup.php',
+        'http://10.93.164.254/tp_final/signup.php',
         {username, password},
       );
       if (response.data.success) {
