@@ -11,7 +11,7 @@ const MessageListScreen = ({navigation}) => {
     const fetchChatrooms = async () => {
       try {
         const response = await axios.get(
-          'http://192.168.1.127:8000/list_chatrooms.php',
+          'http://10.93.164.254/tp_final/list_chatrooms.php',
         );
         setChatrooms(response.data);
       } catch (error) {
