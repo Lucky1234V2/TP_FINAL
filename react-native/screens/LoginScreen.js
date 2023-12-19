@@ -13,13 +13,10 @@ const LoginScreen = ({navigation}) => {
     try {
       // Remplacez par l'URL du reseau à chaque fois que vous lancez le projet
 
-      const response = await axios.post(
-        'http://192.168.43.20/tp_final/login.php',
-        {
-          username,
-          password,
-        },
-      );
+      const response = await axios.post('http://192.168.43.20:8000/login.php', {
+        username,
+        password,
+      });
       console.log('username', username, 'password', password);
       if (response.data.success) {
         setUserId(response.data.user.id);
@@ -37,7 +34,7 @@ const LoginScreen = ({navigation}) => {
   const handleSignup = async () => {
     try {
       const response = await axios.post(
-        'http://192.168.43.20/tp_final/signup.php',
+        'http://192.168.43.20:8000/signup.php',
         {username, password},
       );
       if (response.data.success) {
