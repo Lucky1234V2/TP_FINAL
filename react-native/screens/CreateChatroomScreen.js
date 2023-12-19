@@ -10,7 +10,7 @@ const CreateChatroomScreen = ({navigation}) => {
   const handleCreate = async () => {
     try {
       const response = await axios.post(
-        'http://10.93.164.254/tp_final/create_chatroom.php',
+        'http://192.168.43.20:8000/create_chatroom.php',
         {name},
       );
       if (response.data.success) {

@@ -1,23 +1,30 @@
 // screens/ChatroomScreen.js
 
 import axios from 'axios';
-import React, { useState, useEffect, useContext } from 'react';
-import { Button, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {
+  Button,
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import UserContext from '../UserContext';
 
-const ChatroomScreen = ({ route, navigation }) => {
+const ChatroomScreen = ({route, navigation}) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [editingMessage, setEditingMessage] = useState(null);
   const chatroomId = route.params.chatroomId;
-  const { userId } = useContext(UserContext);
+  const {userId} = useContext(UserContext);
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
         const response = await axios.post(
-          'http://10.93.164.254/tp_final/list_messages.php',
-          { chatroom_id: chatroomId },
+          'http://192.168.43.20:8000/list_messages.php',
+          {chatroom_id: chatroomId},
         );
         setMessages(response.data);
       } catch (error) {
@@ -32,7 +39,7 @@ const ChatroomScreen = ({ route, navigation }) => {
     if (newMessage.trim() !== '') {
       try {
         const response = await axios.post(
-          'http://10.93.164.254/tp_final/send_message.php',
+          'http://192.168.43.20:8000/send_message.php',
           {
             chatroom_id: chatroomId,
             user_id: userId,
@@ -42,7 +49,11 @@ const ChatroomScreen = ({ route, navigation }) => {
         if (response.data.success) {
           setMessages([
             ...messages,
-            { id: response.data.message.id, message: newMessage, timestamp: new Date().toISOString() },
+            {
+              id: response.data.message.id,
+              message: newMessage,
+              timestamp: new Date().toISOString(),
+            },
           ]);
           setNewMessage('');
         } else {
@@ -54,7 +65,7 @@ const ChatroomScreen = ({ route, navigation }) => {
     }
   };
 
-  const handleEditMessage = async (messageId) => {
+  const handleEditMessage = async messageId => {
     try {
       const response = await axios.post(
         'http://10.93.164.254/tp_final/edit_message.php',
@@ -64,39 +75,42 @@ const ChatroomScreen = ({ route, navigation }) => {
         },
       );
       if (response.data.success) {
-        setMessages((prevMessages) =>
-          prevMessages.map((item) =>
-            item.id === messageId ? { ...item, message: newMessage } : item
-          )
+        setMessages(prevMessages =>
+          prevMessages.map(item =>
+            item.id === messageId ? {...item, message: newMessage} : item,
+          ),
         );
         setEditingMessage(null);
         setNewMessage('');
       } else {
-        alert("Erreur lors de la modification du message : " + response.data.message);
+        alert(
+          'Erreur lors de la modification du message : ' +
+            response.data.message,
+        );
       }
     } catch (error) {
       console.error('Erreur détaillée:', error);
-      alert("Erreur lors de la modification du message");
+      alert('Erreur lors de la modification du message');
     }
   };
-  
-  const handleDeleteMessage = async (messageId) => {
+
+  const handleDeleteMessage = async messageId => {
     try {
       const response = await axios.post(
         'http://10.93.164.254/tp_final/delete_message.php',
-        { message_id: messageId },
+        {message_id: messageId},
       );
 
-      console.log("response", response.data)
-      
+      console.log('response', response.data);
+
       if (response.data.success) {
-        setMessages(messages.filter((item) => item.id !== messageId));
+        setMessages(messages.filter(item => item.id !== messageId));
       } else {
-        alert("Erreur lors de la suppression du message");
+        alert('Erreur lors de la suppression du message');
       }
     } catch (error) {
       console.error('Erreur détaillée:', error);
-      alert("Erreur lors de la suppression du message");
+      alert('Erreur lors de la suppression du message');
     }
   };
 
@@ -104,8 +118,8 @@ const ChatroomScreen = ({ route, navigation }) => {
     <View style={styles.container}>
       <FlatList
         data={messages}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
+        keyExtractor={item => item.id.toString()}
+        renderItem={({item}) => (
           <View style={styles.message}>
             {editingMessage === item.id ? (
               <View>
@@ -114,7 +128,10 @@ const ChatroomScreen = ({ route, navigation }) => {
                   onChangeText={setNewMessage}
                   style={styles.input}
                 />
-                <Button title="Enregistrer" onPress={() => handleEditMessage(item.id)} />
+                <Button
+                  title="Enregistrer"
+                  onPress={() => handleEditMessage(item.id)}
+                />
               </View>
             ) : (
               <View>
@@ -122,8 +139,14 @@ const ChatroomScreen = ({ route, navigation }) => {
                 <Text style={styles.timestamp}>
                   {new Date(item.timestamp).toLocaleTimeString()}
                 </Text>
-                <Button title="Modifier" onPress={() => setEditingMessage(item.id)} />
-                <Button title="Supprimer" onPress={() => handleDeleteMessage(item.id)} />
+                <Button
+                  title="Modifier"
+                  onPress={() => setEditingMessage(item.id)}
+                />
+                <Button
+                  title="Supprimer"
+                  onPress={() => handleDeleteMessage(item.id)}
+                />
               </View>
             )}
           </View>
@@ -176,10 +199,6 @@ const styles = StyleSheet.create({
 });
 
 export default ChatroomScreen;
-
-
-
-
 
 // // screens/ChatroomScreen.js
 
