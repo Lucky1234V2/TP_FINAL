@@ -9,7 +9,6 @@ const LoginScreen = ({navigation}) => {
   const {setUserId} = useContext(UserContext);
 
   const handleLogin = async () => {
-    console.log('ici');
     try {
       // Remplacez par l'URL du reseau à chaque fois que vous lancez le projet
 
@@ -17,17 +16,13 @@ const LoginScreen = ({navigation}) => {
         username,
         password,
       });
-      console.log('username', username, 'password', password);
       if (response.data.success) {
         setUserId(response.data.user.id);
-        console.log(response.data.user.id);
         navigation.navigate('MessageList', {userId: response.data.user.id});
       } else {
         alert('Erreur de connexion');
-        console.log('reponse', response);
       }
     } catch (error) {
-      console.error('Erreur détaillée:', error, 'reponse', response);
       alert('Erreur lors de la connexion');
     }
   };
@@ -41,9 +36,10 @@ const LoginScreen = ({navigation}) => {
       if (response.data.success) {
         navigation.navigate('MessageList', {userId: response.data.user.id});
       } else {
-        alert('Erreur lors de la création du compte');
+        alert(response.data.error);
       }
     } catch (error) {
+      console.log('test', error);
       alert('Erreur lors de la création du compte');
     }
   };
