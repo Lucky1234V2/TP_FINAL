@@ -37,13 +37,21 @@ class ChatHandler
         $stmt->execute([$chatroomId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function getChatrooms()
+    public function getChatrooms($userId)
     {
-        $stmt = $this->db->getPdo()->prepare("SELECT * FROM chatrooms");
-        $stmt->execute();
+        // Récupérer tous les salons publics
+        $stmt = $this->db->getPdo()->prepare("
+        SELECT * FROM chatrooms
+        WHERE is_private = 0
+        UNION
+        SELECT chatrooms.* FROM chatrooms
+        JOIN chatroom_access ON chatrooms.id = chatroom_access.chatroom_id
+        WHERE chatroom_access.user_id = ?
+    ");
+        $stmt->execute([$userId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function createChatroom($chatroomData)
+    public function createChatroom($chatroomData, $creatorId)
     {
         // Vérifier si la catégorie existe déjà
         $stmt = $this->db->getPdo()->prepare("SELECT * FROM categorie WHERE categorie = ?");
@@ -54,12 +62,42 @@ class ChatHandler
             $insertCategorie->execute([$chatroomData->categorie]);
         }
 
-        // Insérer le nouveau salon de messagerie dans la base de données avec la catégorie
-        $stmt = $this->db->getPdo()->prepare("INSERT INTO chatrooms (name, categorie) VALUES (?, ?)");
-        if ($stmt->execute([$chatroomData->name, $chatroomData->categorie])) {
-            return ["success" => true, "chatrooms" => $this->getChatrooms()];
+        // Insérer le nouveau salon de messagerie dans la base de données avec la catégorie et le statut privé/public
+        $stmt = $this->db->getPdo()->prepare("INSERT INTO chatrooms (name, categorie, is_private) VALUES (?, ?, ?)");
+        $isPrivate = isset($chatroomData->isPrivate) && $chatroomData->isPrivate ? 1 : 0;
+        if ($stmt->execute([$chatroomData->name, $chatroomData->categorie, $isPrivate])) {
+            $chatroomId = $this->db->getPdo()->lastInsertId();
+            // Ajouter le créateur du salon à la table chatroom_access si le salon est privé
+            if ($isPrivate) {
+                $accessStmt = $this->db->getPdo()->prepare("INSERT INTO chatroom_access (chatroom_id, user_id) VALUES (?, ?)");
+                $accessStmt->execute([$chatroomId, $creatorId]);
+
+                if (isset($chatroomData->invitedUsers) && is_array($chatroomData->invitedUsers)) {
+                    foreach ($chatroomData->invitedUsers as $pseudo) {
+                        $userId = $this->convertPseudoToUserId($pseudo);
+                        echo "Pseudo: $pseudo, ID utilisateur: $userId\n";
+                        if ($userId) {
+                            $accessStmt->execute([$chatroomId, $userId]);
+                        } else {
+                            // Arrêter l'exécution et renvoyer un message d'erreur
+                            return ["success" => false, "error" => "Aucun utilisateur trouvé pour le pseudo '$pseudo'"];
+                        }
+                    }
+                }
+            }
+
+            return ["success" => true, "chatrooms" => $this->getChatrooms($creatorId)];
         } else {
             return ["success" => false, "error" => "Erreur lors de l'insertion du salon de discussion"];
         }
+    }
+
+    private function convertPseudoToUserId($pseudo)
+    {
+        $stmt = $this->db->getPdo()->prepare("SELECT id FROM users WHERE username = ?");
+        $stmt->execute([$pseudo]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $user ? $user['id'] : null;
     }
 }

@@ -8,6 +8,7 @@ import React, {
   useState,
 } from 'react';
 import {
+  Alert,
   Button,
   FlatList,
   Modal,
@@ -20,7 +21,7 @@ import UserContext from '../UserContext';
 
 const MessageListScreen = ({navigation}) => {
   const [chatrooms, setChatrooms] = useState([]);
-  const {setUserId} = useContext(UserContext);
+  const {setUserId, userId} = useContext(UserContext);
   const [selectedCategorie, setSelectedCategorie] = useState('Toutes');
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -43,16 +44,19 @@ const MessageListScreen = ({navigation}) => {
   const ws = useRef(null);
 
   useEffect(() => {
-    ws.current = new WebSocket('ws://192.168.1.127:9000');
+    ws.current = new WebSocket(`ws://192.168.1.127:9000?userId=${userId}`);
 
     ws.current.onopen = () => {
-      console.log('WebSocket Connected');
-      ws.current.send(JSON.stringify({action: 'get_chatrooms'}));
+      console.log('WebSocket Connected', userId);
+      ws.current.send(JSON.stringify({action: 'get_chatrooms', userId}));
     };
 
     ws.current.onmessage = e => {
       const receivedData = JSON.parse(e.data);
-      if (receivedData.action === 'update_chatrooms') {
+      if (receivedData.action === 'error') {
+        // Afficher une alerte si un message d'erreur est reçu
+        Alert.alert('Erreur', receivedData.message);
+      } else if (receivedData.action === 'update_chatrooms') {
         const groupedData = groupByCategory(receivedData.chatrooms);
         setChatrooms(groupedData);
       }

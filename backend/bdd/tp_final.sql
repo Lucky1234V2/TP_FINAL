@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : mysql
--- Généré le : dim. 31 déc. 2023 à 04:08
+-- Généré le : dim. 31 déc. 2023 à 21:54
 -- Version du serveur : 5.7.44
 -- Version de PHP : 8.2.8
 
@@ -36,11 +36,42 @@ CREATE TABLE `categorie` (
 --
 
 INSERT INTO `categorie` (`categorie`) VALUES
+('27'),
 ('autre'),
+('bb'),
 ('blabla'),
+('didi'),
 ('discussions'),
+('dwdwdwd'),
+('eee'),
+('eeee'),
+('eeeee'),
+('erfrfeerfrferferf'),
+('ewewwe'),
+('ff'),
+('gg'),
+('hh'),
 ('jeux'),
-('Non catégorisé');
+('kk'),
+('koko'),
+('mmm'),
+('Non catégorisé'),
+('o'),
+('pp'),
+('r'),
+('rrrrr'),
+('soso'),
+('super'),
+('t'),
+('test'),
+('tgtgtgtg'),
+('tt'),
+('ttt'),
+('vvvv'),
+('wefefwfewfwef'),
+('y'),
+('yesay'),
+('yyyy');
 
 -- --------------------------------------------------------
 
@@ -51,16 +82,20 @@ INSERT INTO `categorie` (`categorie`) VALUES
 CREATE TABLE `chatrooms` (
   `id` int(11) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
-  `categorie` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT 'Non catégorisé'
+  `categorie` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT 'Non catégorisé',
+  `is_private` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
+
 --
--- Déchargement des données de la table `chatrooms`
+-- Structure de la table `chatroom_access`
 --
 
-INSERT INTO `chatrooms` (`id`, `name`, `categorie`) VALUES
-(24, 'gta6', 'jeux'),
-(25, 'ici on parle !', 'blabla');
+CREATE TABLE `chatroom_access` (
+  `chatroom_id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -75,13 +110,6 @@ CREATE TABLE `messages` (
   `message` text,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Déchargement des données de la table `messages`
---
-
-INSERT INTO `messages` (`id`, `chatroom_id`, `user_id`, `message`, `timestamp`) VALUES
-(6, 25, 12, 'salut', '2023-12-31 04:07:05');
 
 -- --------------------------------------------------------
 
@@ -130,6 +158,13 @@ ALTER TABLE `chatrooms`
   ADD KEY `categorie_3` (`categorie`);
 
 --
+-- Index pour la table `chatroom_access`
+--
+ALTER TABLE `chatroom_access`
+  ADD PRIMARY KEY (`chatroom_id`,`user_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- Index pour la table `messages`
 --
 ALTER TABLE `messages`
@@ -151,13 +186,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT pour la table `chatrooms`
 --
 ALTER TABLE `chatrooms`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT pour la table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `users`
@@ -174,6 +209,13 @@ ALTER TABLE `users`
 --
 ALTER TABLE `chatrooms`
   ADD CONSTRAINT `chatrooms_ibfk_1` FOREIGN KEY (`categorie`) REFERENCES `categorie` (`categorie`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `chatroom_access`
+--
+ALTER TABLE `chatroom_access`
+  ADD CONSTRAINT `chatroom_access_ibfk_3` FOREIGN KEY (`chatroom_id`) REFERENCES `chatrooms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `chatroom_access_ibfk_4` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `messages`
