@@ -1,25 +1,19 @@
 // screens/CreateChatroomScreen.js
 
-import axios from 'axios';
 import React, {useState} from 'react';
 import {Button, StyleSheet, TextInput, View} from 'react-native';
+import useWebSocket from './useWebSocket'; // Assurez-vous que le chemin est correct
 
 const CreateChatroomScreen = ({navigation}) => {
   const [name, setName] = useState('');
+  const {isConnected, sendMessage} = useWebSocket('ws://192.168.1.127:9000');
 
-  const handleCreate = async () => {
-    try {
-      const response = await axios.post(
-        'http://192.168.43.20:8000/create_chatroom.php',
-        {name},
-      );
-      if (response.data.success) {
-        navigation.goBack();
-      } else {
-        alert('Erreur lors de la création de la messagerie');
-      }
-    } catch (error) {
-      alert('Erreur lors de la création de la messagerie');
+  const handleCreate = () => {
+    if (isConnected) {
+      sendMessage({action: 'create_chatroom', name});
+      navigation.goBack();
+    } else {
+      alert('Erreur de connexion WebSocket');
     }
   };
 

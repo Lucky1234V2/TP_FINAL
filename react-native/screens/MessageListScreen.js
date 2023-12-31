@@ -1,25 +1,39 @@
 // screens/MessageListScreen.js
 
-import axios from 'axios';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Button, FlatList, StyleSheet, Text, View} from 'react-native';
 
 const MessageListScreen = ({navigation}) => {
   const [chatrooms, setChatrooms] = useState([]);
+  const ws = useRef(null);
 
   useEffect(() => {
-    const fetchChatrooms = async () => {
-      try {
-        const response = await axios.get(
-          'http://192.168.43.20:8000/list_chatrooms.php',
-        );
-        setChatrooms(response.data);
-      } catch (error) {
-        alert('Erreur lors de la récupération des messageries');
+    ws.current = new WebSocket('ws://192.168.1.127:9000');
+
+    ws.current.onopen = () => {
+      console.log('WebSocket Connected');
+      ws.current.send(JSON.stringify({action: 'get_chatrooms'}));
+    };
+
+    ws.current.onmessage = e => {
+      const receivedData = JSON.parse(e.data);
+      if (receivedData.action === 'update_chatrooms') {
+        setChatrooms(receivedData.chatrooms);
+
       }
     };
 
-    fetchChatrooms();
+    ws.onerror = e => {
+      console.log('WebSocket Error: ', e.message);
+    };
+
+    ws.onclose = e => {
+      console.log('WebSocket Disconnected');
+    };
+
+    return () => {
+      ws.close();
+    };
   }, []);
 
   return (

@@ -1,6 +1,4 @@
 // screens/ChatroomScreen.js
-
-import axios from 'axios';
 import React, {useContext, useEffect, useState} from 'react';
 import {
   Button,
@@ -15,51 +13,58 @@ import UserContext from '../UserContext';
 const ChatroomScreen = ({route, navigation}) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const [editingMessage, setEditingMessage] = useState(null);
+  const [webSocket, setWebSocket] = useState(null);
   const chatroomId = route.params.chatroomId;
   const {userId} = useContext(UserContext);
 
   useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        const response = await axios.post(
-          'http://192.168.43.20:8000/list_messages.php',
-          {chatroom_id: chatroomId},
-        );
-        setMessages(response.data);
-      } catch (error) {
-        alert('Erreur lors de la récupération des messages');
+    // Remplacer 'ws://votre_serveur_websocket' par l'URL de votre serveur WebSocket
+    const ws = new WebSocket('ws://192.168.1.127:9000');
+
+    ws.onopen = () => {
+      console.log('WebSocket Connected');
+      ws.send(JSON.stringify({action: 'join', chatroomId}));
+    };
+
+    ws.onmessage = e => {
+      const receivedData = JSON.parse(e.data);
+      if (Array.isArray(receivedData)) {
+        // Si c'est une liste de messages (lors de la connexion initiale)
+        setMessages(receivedData);
+      } else {
+        // Si c'est un seul message (nouveau ou modifié)
+        setMessages(prevMessages => [...prevMessages, receivedData]);
       }
     };
 
-    fetchMessages();
-  }, [chatroomId]);
+    ws.onerror = e => {
+      console.log(e.message);
+    };
 
-  const handleSendMessage = async () => {
+    ws.onclose = e => {
+      console.log('WebSocket Disconnected');
+    };
+
+    setWebSocket(ws);
+
+    return () => {
+      ws.close();
+    };
+  }, []);
+
+  const handleSendMessage = () => {
     if (newMessage.trim() !== '') {
-      try {
-        const response = await axios.post(
-          'http://192.168.43.20:8000/send_message.php',
-          {
-            chatroom_id: chatroomId,
-            user_id: userId,
-            message: newMessage,
-          },
-        );
-        if (response.data.success) {
-          setMessages([
-            ...messages,
-            {
-              id: response.data.message.id,
-              message: newMessage,
-              timestamp: new Date().toISOString(),
-            },
-          ]);
-          setNewMessage('');
-        } else {
-          alert("Erreur lors de l'envoi du message");
-        }
-      } catch (error) {
+      const message = {
+        action: 'message',
+        chatroom_id: chatroomId,
+        user_id: userId,
+        message: newMessage,
+      };
+
+      if (webSocket && webSocket.readyState === WebSocket.OPEN) {
+        webSocket.send(JSON.stringify(message));
+        setNewMessage('');
+      } else {
         alert("Erreur lors de l'envoi du message");
       }
     }
@@ -118,7 +123,9 @@ const ChatroomScreen = ({route, navigation}) => {
     <View style={styles.container}>
       <FlatList
         data={messages}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={item =>
+          item.id ? item.id.toString() : Math.random().toString()
+        }
         renderItem={({item}) => (
           <View style={styles.message}>
             {editingMessage === item.id ? (
