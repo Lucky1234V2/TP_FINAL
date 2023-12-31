@@ -19,6 +19,7 @@ const MessageListScreen = ({navigation}) => {
       const receivedData = JSON.parse(e.data);
       if (receivedData.action === 'update_chatrooms') {
         setChatrooms(receivedData.chatrooms);
+
       }
     };
 
