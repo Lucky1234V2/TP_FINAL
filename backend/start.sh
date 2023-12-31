@@ -3,7 +3,7 @@
 apache2-foreground &
 
 # Attendre que MySQL soit opérationnel
-sleep 10
+sleep 5
 
 # Démarrer le serveur WebSocket
 php /var/www/html/websocket/WebSocketServer.php
