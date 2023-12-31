@@ -5,9 +5,9 @@
  * @format
  */
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, { useState } from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import React, {useState} from 'react';
 import UserContext from './UserContext';
 import ChatroomScreen from './screens/ChatroomScreen';
 import CreateChatroomScreen from './screens/CreateChatroomScreen';
