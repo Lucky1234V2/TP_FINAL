@@ -67,6 +67,8 @@ const ChatroomScreen = ({route, navigation}) => {
       } else {
         alert("Erreur lors de l'envoi du message");
       }
+    } else {
+      alert('Veuillez remplir le champ de message');
     }
   };
 

@@ -45,11 +45,21 @@ class ChatHandler
     }
     public function createChatroom($chatroomData)
     {
-        // Insérer le nouveau salon de messagerie dans la base de données
-        $stmt = $this->db->getPdo()->prepare("INSERT INTO chatrooms (name) VALUES (?)");
-        $stmt->execute([$chatroomData->name]);
+        // Vérifier si la catégorie existe déjà
+        $stmt = $this->db->getPdo()->prepare("SELECT * FROM categorie WHERE categorie = ?");
+        $stmt->execute([$chatroomData->categorie]);
+        if ($stmt->rowCount() == 0) {
+            // La catégorie n'existe pas, donc on l'insère
+            $insertCategorie = $this->db->getPdo()->prepare("INSERT INTO categorie (categorie) VALUES (?)");
+            $insertCategorie->execute([$chatroomData->categorie]);
+        }
 
-        // Récupérer et retourner la liste mise à jour des salons de messagerie
-        return $this->getChatrooms();
+        // Insérer le nouveau salon de messagerie dans la base de données avec la catégorie
+        $stmt = $this->db->getPdo()->prepare("INSERT INTO chatrooms (name, categorie) VALUES (?, ?)");
+        if ($stmt->execute([$chatroomData->name, $chatroomData->categorie])) {
+            return ["success" => true, "chatrooms" => $this->getChatrooms()];
+        } else {
+            return ["success" => false, "error" => "Erreur lors de l'insertion du salon de discussion"];
+        }
     }
 }
