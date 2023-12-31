@@ -6,12 +6,17 @@ import useWebSocket from './useWebSocket'; // Assurez-vous que le chemin est cor
 
 const CreateChatroomScreen = ({navigation}) => {
   const [name, setName] = useState('');
+  const [categorie, setCategorie] = useState('');
   const {isConnected, sendMessage} = useWebSocket('ws://192.168.1.127:9000');
 
   const handleCreate = () => {
     if (isConnected) {
-      sendMessage({action: 'create_chatroom', name});
-      navigation.goBack();
+      if (!name || !categorie) {
+        alert('Veuillez remplir tous les champs');
+      } else {
+        sendMessage({action: 'create_chatroom', name, categorie});
+        navigation.goBack();
+      }
     } else {
       alert('Erreur de connexion WebSocket');
     }
@@ -23,6 +28,12 @@ const CreateChatroomScreen = ({navigation}) => {
         placeholder="Nom de la messagerie"
         value={name}
         onChangeText={setName}
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="Catégorie"
+        value={categorie}
+        onChangeText={setCategorie}
         style={styles.input}
       />
       <Button title="Créer" onPress={handleCreate} />

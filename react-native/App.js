@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
@@ -20,7 +13,7 @@ function App() {
   return (
     <NavigationContainer>
       <UserContext.Provider value={{userId, setUserId}}>
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator>
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="MessageList" component={MessageListScreen} />
           <Stack.Screen
