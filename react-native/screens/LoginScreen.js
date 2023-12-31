@@ -20,7 +20,7 @@ const LoginScreen = ({navigation}) => {
     try {
       // Remplacez par l'URL du reseau à chaque fois que vous lancez le projet
 
-      const response = await axios.post('http://192.168.1.127:8000/login.php', {
+      const response = await axios.post('http://192.168.43.20:8000/login.php', {
         username,
         password,
       });
@@ -38,7 +38,7 @@ const LoginScreen = ({navigation}) => {
   const handleSignup = async () => {
     try {
       const response = await axios.post(
-        'http://192.168.1.127:8000/signup.php',
+        'http://192.168.43.20:8000/signup.php',
         {username, password},
       );
       if (response.data.success) {
