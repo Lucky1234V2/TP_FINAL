@@ -39,8 +39,8 @@ Le container tp_final-php ne se lancera pas initialement, car il nécessite une 
 
       rootpassword
 
-- Importez la base de données 'tp_final' qui se trouve dans le dossier
-backend/bdd.
+- Importez la base de données 'tp_final' qui se trouve ici
+[bdd tp_final](backend/bdd)
 - Après l'ajout de la base de données, exécutez :
 
       docker-compose restart
