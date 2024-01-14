@@ -35,4 +35,4 @@ EXPOSE 80
 EXPOSE 9000
 
 # Définir le script de démarrage comme commande par défaut
-CMD ["start.sh"]
+CMD ["/usr/local/bin/start.sh"]
