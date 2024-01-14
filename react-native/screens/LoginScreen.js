@@ -18,6 +18,7 @@ const LoginScreen = ({navigation}) => {
 
   const handleLogin = async () => {
     try {
+
       const response = await axios.post(
         'http://192.168.1.127:8000/auth/login.php',
         {
@@ -39,7 +40,9 @@ const LoginScreen = ({navigation}) => {
   const handleSignup = async () => {
     try {
       const response = await axios.post(
+
         'http://192.168.1.127:8000/auth/signup.php',
+
         {username, password},
       );
       if (response.data.success) {

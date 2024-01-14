@@ -58,6 +58,7 @@ const MessageListScreen = ({navigation}) => {
       } else if (receivedData.action === 'update_chatrooms') {
         const groupedData = groupByCategory(receivedData.chatrooms);
         setChatrooms(groupedData);
+
       }
     };
 
