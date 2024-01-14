@@ -7,15 +7,19 @@ services:
       - "9000:9000"  # serveur WebSocket
     volumes:
       - ./backend:/var/www/html
+    depends_on:
+      - mysql
+      - phpmyadmin
   mysql:
     image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: mydatabase
+      MYSQL_DATABASE: tp_final
     ports:
       - "3306:3306"
     volumes:
-      - ./bdd:/docker-entrypoint-initdb.d
+      - ./backend/bdd/tp_final.sql:/docker-entrypoint-initdb.d/tp_final.sql
+      - mysql_data:/var/lib/mysql
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
@@ -25,3 +29,6 @@ services:
       - "8080:80"
     depends_on:
       - mysql
+
+volumes:
+  mysql_data:

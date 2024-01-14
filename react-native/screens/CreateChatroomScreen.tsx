@@ -72,6 +72,3 @@ const CreateChatroomScreen = ({navigation}: {navigation: any}) => {
 };
 
 export default CreateChatroomScreen;
-function alert(arg0: string) {
-  throw new Error('Function not implemented.');
-}
