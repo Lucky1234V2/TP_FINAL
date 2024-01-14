@@ -1,4 +1,3 @@
-// useWebSocket.js
 import {useEffect, useRef, useState} from 'react';
 
 const useWebSocket = url => {

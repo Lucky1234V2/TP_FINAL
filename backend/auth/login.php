@@ -1,5 +1,5 @@
 <?php
-require 'db.php';
+require '../db.php';
 
 $data = json_decode(file_get_contents("php://input"));
 
@@ -17,4 +17,3 @@ if (isset($data->username) && isset($data->password)) {
         echo json_encode(["success" => false]);
     }
 }
-//testo

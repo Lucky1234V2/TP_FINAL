@@ -1,9 +1,8 @@
-#!/bin/bash
-# Démarrer Apache en arrière-plan
+# Start Apache in the background
 apache2-foreground &
 
-# Attendre que MySQL soit opérationnel
+# Wait until MySQL is up and running
 sleep 5
 
-# Démarrer le serveur WebSocket
+# Start the WebSocket server
 php /var/www/html/websocket/WebSocketServer.php

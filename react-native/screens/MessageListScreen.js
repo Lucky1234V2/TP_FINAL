@@ -26,8 +26,8 @@ const MessageListScreen = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleLogout = () => {
-    setUserId(null); // Mettre à jour le contexte pour vider userId
-    navigation.navigate('Login'); // Rediriger vers l'écran de connexion
+    setUserId(null);
+    navigation.navigate('Login');
   };
 
   useLayoutEffect(() => {
@@ -54,7 +54,6 @@ const MessageListScreen = ({navigation}) => {
     ws.current.onmessage = e => {
       const receivedData = JSON.parse(e.data);
       if (receivedData.action === 'error') {
-        // Afficher une alerte si un message d'erreur est reçu
         Alert.alert('Erreur', receivedData.message);
       } else if (receivedData.action === 'update_chatrooms') {
         const groupedData = groupByCategory(receivedData.chatrooms);
