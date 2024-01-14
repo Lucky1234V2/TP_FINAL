@@ -46,6 +46,10 @@ class WebSocketServer implements MessageComponentInterface
             handleGetChatroomsAction($this->chatHandler, $data, $from);
         } elseif ($data->action === 'create_chatroom') {
             handleCreateChatroomAction($this->chatHandler, $this->userIds, $this->clients, $data, $from);
+        } else if ($data->action === 'delete_chatroom') {
+            handleDeleteChatroomAction($this->chatHandler, $data, $from);
+        } else if ($data->action === 'update_chatroom') {
+            handleUpdateChatroomAction($this->chatHandler, $data, $from);
         }
     }
 

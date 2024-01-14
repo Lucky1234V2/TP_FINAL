@@ -3,6 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import UserContext from './UserContext';
 import ChatroomScreen from './screens/ChatroomScreen';
+import ChatroomSettingsScreen from './screens/ChatroomSettingsScreen';
 import CreateChatroomScreen from './screens/CreateChatroomScreen';
 import LoginScreen from './screens/LoginScreen';
 import MessageListScreen from './screens/MessageListScreen';
@@ -21,6 +22,10 @@ function App() {
             component={CreateChatroomScreen}
           />
           <Stack.Screen name="Chatroom" component={ChatroomScreen} />
+          <Stack.Screen
+            name="ChatroomSettings"
+            component={ChatroomSettingsScreen}
+          />
         </Stack.Navigator>
       </UserContext.Provider>
     </NavigationContainer>

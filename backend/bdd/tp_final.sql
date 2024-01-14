@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : mysql
--- Généré le : dim. 31 déc. 2023 à 21:54
+-- Généré le : dim. 14 jan. 2024 à 07:49
 -- Version du serveur : 5.7.44
 -- Version de PHP : 8.2.8
 
@@ -36,42 +36,7 @@ CREATE TABLE `categorie` (
 --
 
 INSERT INTO `categorie` (`categorie`) VALUES
-('27'),
-('autre'),
-('bb'),
-('blabla'),
-('didi'),
-('discussions'),
-('dwdwdwd'),
-('eee'),
-('eeee'),
-('eeeee'),
-('erfrfeerfrferferf'),
-('ewewwe'),
-('ff'),
-('gg'),
-('hh'),
-('jeux'),
-('kk'),
-('koko'),
-('mmm'),
-('Non catégorisé'),
-('o'),
-('pp'),
-('r'),
-('rrrrr'),
-('soso'),
-('super'),
-('t'),
-('test'),
-('tgtgtgtg'),
-('tt'),
-('ttt'),
-('vvvv'),
-('wefefwfewfwef'),
-('y'),
-('yesay'),
-('yyyy');
+('ttt');
 
 -- --------------------------------------------------------
 
@@ -136,7 +101,8 @@ INSERT INTO `users` (`id`, `username`, `password`) VALUES
 (10, 'rr', '$2y$10$omP5oPbwlat0Tccqqplpe.FACRVAf8kGvbPT13j0ZdChZVCo2WUIK'),
 (11, 'ii', '$2y$10$uLeWmU2Q5a3uD6yg/pFhUuf7hik6fQzG54NKM27Y0JaXNhxp3kjbK'),
 (12, 't', '$2y$10$riM.PYu4/nI.N3WvvaSZQ.YkRPWDwxS5GS/1Zvq3mxC6oGmf689Fe'),
-(13, 'r', '$2y$10$vvrGB4EGHHwjiqghNKzBE.mD1sQzRWh3B0eVUFRvgirJjkXxKma3G');
+(13, 'r', '$2y$10$vvrGB4EGHHwjiqghNKzBE.mD1sQzRWh3B0eVUFRvgirJjkXxKma3G'),
+(14, 'pp', '$2y$10$ANSuzff/OUoOKfFh4BTimer4d6YIO8asZHDCjv7iNx9rqctvWJ9Tq');
 
 --
 -- Index pour les tables déchargées
@@ -198,7 +164,7 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Contraintes pour les tables déchargées

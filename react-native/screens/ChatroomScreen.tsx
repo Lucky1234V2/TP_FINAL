@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useLayoutEffect, useState} from 'react';
 import {Button, FlatList, Text, TextInput, View} from 'react-native';
 import UserContext from '../UserContext';
 import styles from '../styles/ChatroomScreenStyles';
@@ -17,12 +17,32 @@ interface Message {
   timestamp: string;
 }
 
-const ChatroomScreen: React.FC<ChatroomScreenProps> = ({route}) => {
+interface ChatroomScreenProps {
+  navigation: any; // Replace 'any' with the appropriate type for the navigation property
+  route: {
+    params: {
+      chatroomId: number;
+    };
+  };
+}
+
+const ChatroomScreen: React.FC<ChatroomScreenProps> = ({navigation, route}) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState<string>('');
   const [webSocket, setWebSocket] = useState<WebSocket | null>(null);
   const chatroomId = route.params.chatroomId;
   const {userId} = useContext(UserContext);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Button
+          onPress={() => navigation.navigate('ChatroomSettings', {chatroomId})}
+          title="Paramètres"
+        />
+      ),
+    });
+  }, [navigation, chatroomId]);
 
   useEffect(() => {
     const ws = new WebSocket('ws://192.168.1.127:9000');
