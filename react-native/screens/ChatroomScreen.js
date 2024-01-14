@@ -1,15 +1,9 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {
-  Button,
-  FlatList,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import {Button, FlatList, Text, TextInput, View} from 'react-native';
 import UserContext from '../UserContext';
+import styles from '../styles/ChatroomScreenStyles';
 
-const ChatroomScreen = ({route, navigation}) => {
+const ChatroomScreen = ({route}) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [webSocket, setWebSocket] = useState(null);
@@ -94,38 +88,5 @@ const ChatroomScreen = ({route, navigation}) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-  },
-  message: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: 'gray',
-  },
-  timestamp: {
-    fontSize: 10,
-    color: 'gray',
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 10,
-  },
-  input: {
-    flex: 1,
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginRight: 10,
-    padding: 10,
-  },
-});
 
 export default ChatroomScreen;

@@ -1,15 +1,9 @@
 import axios from 'axios';
 import React, {useContext, useState} from 'react';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import UserContext from '../UserContext';
 import logo from '../assets/logo.png';
+import styles from '../styles/LoginScreenStyles';
 
 const LoginScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
@@ -18,7 +12,6 @@ const LoginScreen = ({navigation}) => {
 
   const handleLogin = async () => {
     try {
-
       const response = await axios.post(
         'http://192.168.1.127:8000/auth/login.php',
         {
@@ -40,7 +33,6 @@ const LoginScreen = ({navigation}) => {
   const handleSignup = async () => {
     try {
       const response = await axios.post(
-
         'http://192.168.1.127:8000/auth/signup.php',
 
         {username, password},
@@ -89,53 +81,5 @@ const LoginScreen = ({navigation}) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logo: {
-    width: 200,
-    height: 200,
-    resizeMode: 'contain',
-  },
-  image: {
-    marginBottom: 20,
-  },
-
-  inputView: {
-    backgroundColor: '#cbcbcb',
-    borderRadius: 10,
-    width: '55%',
-    height: 45,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-
-  TextInput: {
-    height: 50,
-    flex: 1,
-    padding: 10,
-    marginLeft: 20,
-  },
-
-  forgot_button: {
-    height: 30,
-    marginBottom: 30,
-  },
-
-  loginBtn: {
-    width: '50%',
-    borderRadius: 25,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
-    backgroundColor: '#a0cc95',
-  },
-});
 
 export default LoginScreen;
