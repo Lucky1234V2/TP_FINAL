@@ -1,4 +1,4 @@
-import {useContext, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Button, Switch, Text, TextInput, View} from 'react-native';
 import UserContext from '../UserContext';
 import styles from '../styles/CreateChatroomScreenStyles';
