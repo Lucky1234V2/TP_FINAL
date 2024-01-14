@@ -68,92 +68,17 @@ const ChatroomScreen = ({route, navigation}) => {
     }
   };
 
-  const handleEditMessage = async messageId => {
-    try {
-      const response = await axios.post(
-        'http://10.93.164.254/tp_final/edit_message.php',
-        {
-          message_id: messageId,
-          new_message: newMessage,
-        },
-      );
-      if (response.data.success) {
-        setMessages(prevMessages =>
-          prevMessages.map(item =>
-            item.id === messageId ? {...item, message: newMessage} : item,
-          ),
-        );
-        setEditingMessage(null);
-        setNewMessage('');
-      } else {
-        alert(
-          'Erreur lors de la modification du message : ' +
-            response.data.message,
-        );
-      }
-    } catch (error) {
-      console.error('Erreur détaillée:', error);
-      alert('Erreur lors de la modification du message');
-    }
-  };
-
-  const handleDeleteMessage = async messageId => {
-    try {
-      const response = await axios.post(
-        'http://10.93.164.254/tp_final/delete_message.php',
-        {message_id: messageId},
-      );
-
-      console.log('response', response.data);
-
-      if (response.data.success) {
-        setMessages(messages.filter(item => item.id !== messageId));
-      } else {
-        alert('Erreur lors de la suppression du message');
-      }
-    } catch (error) {
-      console.error('Erreur détaillée:', error);
-      alert('Erreur lors de la suppression du message');
-    }
-  };
-
   return (
     <View style={styles.container}>
       <FlatList
         data={messages}
-        keyExtractor={item =>
-          item.id ? item.id.toString() : Math.random().toString()
-        }
+        keyExtractor={item => item.id}
         renderItem={({item}) => (
           <View style={styles.message}>
-            {editingMessage === item.id ? (
-              <View>
-                <TextInput
-                  value={newMessage}
-                  onChangeText={setNewMessage}
-                  style={styles.input}
-                />
-                <Button
-                  title="Enregistrer"
-                  onPress={() => handleEditMessage(item.id)}
-                />
-              </View>
-            ) : (
-              <View>
-                <Text>{item.message}</Text>
-                <Text style={styles.timestamp}>
-                  {new Date(item.timestamp).toLocaleTimeString()}
-                </Text>
-                <Button
-                  title="Modifier"
-                  onPress={() => setEditingMessage(item.id)}
-                />
-                <Button
-                  title="Supprimer"
-                  onPress={() => handleDeleteMessage(item.id)}
-                />
-              </View>
-            )}
+            <Text>{item.message}</Text>
+            <Text style={styles.timestamp}>
+              {new Date(item.timestamp).toLocaleTimeString()}
+            </Text>
           </View>
         )}
       />
