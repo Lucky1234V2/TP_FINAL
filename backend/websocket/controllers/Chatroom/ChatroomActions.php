@@ -21,3 +21,23 @@ function handleCreateChatroomAction($chatHandler, $userIds, $clients, $data, $fr
         $from->send(json_encode(['action' => 'create_chatroom_failed', 'error' => $response["error"]]));
     }
 }
+
+function handleDeleteChatroomAction($chatHandler, $data, $from)
+{
+    $chatroomId = $data->chatroomId;
+    $response = $chatHandler->deleteChatroom($chatroomId);
+
+    $from->send(json_encode($response));
+}
+
+function handleUpdateChatroomAction($chatHandler, $data, $from)
+{
+    $chatroomData = [
+        'chatroomId' => $data->chatroomId,
+        'newName' => $data->newName,
+        'newCategorie' => $data->newCategorie
+    ];
+    $response = $chatHandler->updateChatroom($chatroomData);
+
+    $from->send(json_encode($response));
+}

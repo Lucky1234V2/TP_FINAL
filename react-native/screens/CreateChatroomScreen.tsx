@@ -1,8 +1,9 @@
 import React, {useContext, useState} from 'react';
-import {Button, StyleSheet, Switch, Text, TextInput, View} from 'react-native';
+import {Button, Switch, Text, TextInput, View} from 'react-native';
 import UserContext from '../UserContext';
-import useWebSocket from './useWebSocket'; // Assurez-vous que le chemin est correct
-const CreateChatroomScreen = ({navigation}) => {
+import styles from '../styles/CreateChatroomScreenStyles';
+import useWebSocket from './useWebSocket';
+const CreateChatroomScreen = ({navigation}: {navigation: any}) => {
   const [name, setName] = useState('');
   const [categorie, setCategorie] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
@@ -70,24 +71,7 @@ const CreateChatroomScreen = ({navigation}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
-    padding: 10,
-  },
-  switchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-});
-
 export default CreateChatroomScreen;
+function alert(arg0: string) {
+  throw new Error('Function not implemented.');
+}
