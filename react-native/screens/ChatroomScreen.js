@@ -1,4 +1,3 @@
-// screens/ChatroomScreen.js
 import React, {useContext, useEffect, useState} from 'react';
 import {
   Button,
@@ -18,7 +17,6 @@ const ChatroomScreen = ({route, navigation}) => {
   const {userId} = useContext(UserContext);
 
   useEffect(() => {
-    // Remplacer 'ws://votre_serveur_websocket' par l'URL de votre serveur WebSocket
     const ws = new WebSocket('ws://192.168.1.127:9000');
 
     ws.onopen = () => {
@@ -29,10 +27,8 @@ const ChatroomScreen = ({route, navigation}) => {
     ws.onmessage = e => {
       const receivedData = JSON.parse(e.data);
       if (Array.isArray(receivedData)) {
-        // Si c'est une liste de messages (lors de la connexion initiale)
         setMessages(receivedData);
       } else {
-        // Si c'est un seul message (nouveau ou modifié)
         setMessages(prevMessages => [...prevMessages, receivedData]);
       }
     };

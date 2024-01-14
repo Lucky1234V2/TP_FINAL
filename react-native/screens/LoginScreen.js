@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import UserContext from '../UserContext';
-import logo from '../assets/logo.png'; // Assurez-vous que le chemin est correct
+import logo from '../assets/logo.png';
 
 const LoginScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
@@ -18,12 +18,14 @@ const LoginScreen = ({navigation}) => {
 
   const handleLogin = async () => {
     try {
-      // Remplacez par l'URL du reseau à chaque fois que vous lancez le projet
 
-      const response = await axios.post('http://192.168.43.20:8000/login.php', {
-        username,
-        password,
-      });
+      const response = await axios.post(
+        'http://192.168.1.127:8000/auth/login.php',
+        {
+          username,
+          password,
+        },
+      );
       if (response.data.success) {
         setUserId(response.data.user.id);
         navigation.navigate('MessageList', {userId: response.data.user.id});
@@ -38,13 +40,13 @@ const LoginScreen = ({navigation}) => {
   const handleSignup = async () => {
     try {
       const response = await axios.post(
-        'http://192.168.43.20:8000/signup.php',
+
+        'http://192.168.1.127:8000/auth/signup.php',
+
         {username, password},
       );
       if (response.data.success) {
         alert('Compte créé avec succès');
-        // Optionnel : Rediriger vers l'écran de connexion
-        // navigation.navigate('Login');
       } else {
         alert(response.data.error || 'Erreur lors de la création du compte');
       }

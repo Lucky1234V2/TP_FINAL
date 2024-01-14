@@ -1,5 +1,3 @@
-// screens/CreateChatroomScreen.js
-
 import React, {useContext, useState} from 'react';
 import {Button, StyleSheet, Switch, Text, TextInput, View} from 'react-native';
 import UserContext from '../UserContext';
