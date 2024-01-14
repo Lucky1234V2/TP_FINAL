@@ -1,8 +1,13 @@
 import {useEffect, useRef, useState} from 'react';
 
-const useWebSocket = url => {
-  const [isConnected, setIsConnected] = useState(false);
-  const ws = useRef(null);
+interface UseWebSocketReturn {
+  isConnected: boolean;
+  sendMessage: (message: Record<string, unknown>) => void;
+}
+
+const useWebSocket = (url: string): UseWebSocketReturn => {
+  const [isConnected, setIsConnected] = useState<boolean>(false);
+  const ws = useRef<WebSocket | null>(null);
 
   useEffect(() => {
     ws.current = new WebSocket(url);
@@ -16,11 +21,13 @@ const useWebSocket = url => {
     };
 
     return () => {
-      ws.current.close();
+      if (ws.current) {
+        ws.current.close();
+      }
     };
   }, [url]);
 
-  const sendMessage = message => {
+  const sendMessage = (message: Record<string, unknown>) => {
     if (ws.current && ws.current.readyState === WebSocket.OPEN) {
       ws.current.send(JSON.stringify(message));
     }

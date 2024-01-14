@@ -1,9 +1,9 @@
-import React, {useContext, useState} from 'react';
+import {useContext, useState} from 'react';
 import {Button, Switch, Text, TextInput, View} from 'react-native';
 import UserContext from '../UserContext';
 import styles from '../styles/CreateChatroomScreenStyles';
 import useWebSocket from './useWebSocket';
-const CreateChatroomScreen = ({navigation}) => {
+const CreateChatroomScreen = ({navigation}: {navigation: any}) => {
   const [name, setName] = useState('');
   const [categorie, setCategorie] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
@@ -72,3 +72,6 @@ const CreateChatroomScreen = ({navigation}) => {
 };
 
 export default CreateChatroomScreen;
+function alert(arg0: string) {
+  throw new Error('Function not implemented.');
+}

@@ -1,5 +1,3 @@
-// screens/MessageListScreen.js
-
 import React, {
   useContext,
   useEffect,
@@ -19,11 +17,29 @@ import {
 import UserContext from '../UserContext';
 import styles from '../styles/MessageListScreenStyles';
 
-const MessageListScreen = ({navigation}) => {
-  const [chatrooms, setChatrooms] = useState([]);
+interface MessageListScreenProps {
+  navigation: {
+    navigate: (screen: string, params?: Record<string, unknown>) => void;
+    setOptions: (options: Record<string, unknown>) => void;
+  };
+}
+
+interface Chatroom {
+  id: string;
+  name: string;
+  categorie: string;
+}
+
+interface GroupedChatrooms {
+  categorie: string;
+  chatrooms: Chatroom[];
+}
+
+const MessageListScreen: React.FC<MessageListScreenProps> = ({navigation}) => {
+  const [chatrooms, setChatrooms] = useState<GroupedChatrooms[]>([]);
   const {setUserId, userId} = useContext(UserContext);
-  const [selectedCategorie, setSelectedCategorie] = useState('Toutes');
-  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedCategorie, setSelectedCategorie] = useState<string>('Toutes');
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const handleLogout = () => {
     setUserId(null);
@@ -41,14 +57,16 @@ const MessageListScreen = ({navigation}) => {
     });
   }, [navigation, setUserId]);
 
-  const ws = useRef(null);
+  const ws = useRef<WebSocket | null>(null);
 
   useEffect(() => {
     ws.current = new WebSocket(`ws://192.168.1.127:9000?userId=${userId}`);
 
     ws.current.onopen = () => {
       console.log('WebSocket Connected', userId);
-      ws.current.send(JSON.stringify({action: 'get_chatrooms', userId}));
+      if (ws.current) {
+        ws.current.send(JSON.stringify({action: 'get_chatrooms', userId}));
+      }
     };
 
     ws.current.onmessage = e => {
@@ -61,26 +79,31 @@ const MessageListScreen = ({navigation}) => {
       }
     };
 
-    ws.onerror = e => {
+    ws.current.onerror = e => {
       console.log('WebSocket Error: ', e.message);
     };
 
-    ws.onclose = e => {
+    ws.current.onclose = e => {
       console.log('WebSocket Disconnected');
     };
 
     return () => {
-      if (ws && typeof ws.close === 'function') {
-        ws.close();
+      if (ws.current && typeof ws.current.close === 'function') {
+        ws.current.close();
       }
     };
-  }, []);
+  }, [userId]);
 
-  const groupByCategory = chatrooms => {
-    const grouped = chatrooms.reduce((acc, chatroom) => {
-      (acc[chatroom.categorie] = acc[chatroom.categorie] || []).push(chatroom);
-      return acc;
-    }, {});
+  const groupByCategory = (chatrooms: Chatroom[]): GroupedChatrooms[] => {
+    const grouped = chatrooms.reduce(
+      (acc: Record<string, Chatroom[]>, chatroom: Chatroom) => {
+        (acc[chatroom.categorie] = acc[chatroom.categorie] || []).push(
+          chatroom,
+        );
+        return acc;
+      },
+      {},
+    );
 
     return Object.keys(grouped).map(key => ({
       categorie: key,
@@ -88,7 +111,7 @@ const MessageListScreen = ({navigation}) => {
     }));
   };
 
-  const renderCategory = ({item}) => (
+  const renderCategory = ({item}: {item: GroupedChatrooms}) => (
     <View style={styles.categoryContainer}>
       <Text style={styles.categoryHeader}>{item.categorie}</Text>
       {item.chatrooms.map(chatroom => (
@@ -104,7 +127,7 @@ const MessageListScreen = ({navigation}) => {
     </View>
   );
 
-  const filterChatroomsByCategorie = () => {
+  const filterChatroomsByCategorie = (): GroupedChatrooms[] => {
     if (selectedCategorie === 'Toutes') {
       return chatrooms;
     }

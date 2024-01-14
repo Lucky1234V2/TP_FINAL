@@ -3,10 +3,24 @@ import {Button, FlatList, Text, TextInput, View} from 'react-native';
 import UserContext from '../UserContext';
 import styles from '../styles/ChatroomScreenStyles';
 
-const ChatroomScreen = ({route}) => {
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
-  const [webSocket, setWebSocket] = useState(null);
+interface ChatroomScreenProps {
+  route: {
+    params: {
+      chatroomId: number;
+    };
+  };
+}
+
+interface Message {
+  id: string;
+  message: string;
+  timestamp: string;
+}
+
+const ChatroomScreen: React.FC<ChatroomScreenProps> = ({route}) => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [newMessage, setNewMessage] = useState<string>('');
+  const [webSocket, setWebSocket] = useState<WebSocket | null>(null);
   const chatroomId = route.params.chatroomId;
   const {userId} = useContext(UserContext);
 
@@ -90,3 +104,6 @@ const ChatroomScreen = ({route}) => {
 };
 
 export default ChatroomScreen;
+function alert(arg0: string) {
+  throw new Error('Function not implemented.');
+}
